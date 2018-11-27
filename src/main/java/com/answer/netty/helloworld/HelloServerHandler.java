@@ -32,10 +32,11 @@ public class HelloServerHandler extends SimpleChannelInboundHandler {
      * @throws Exception
      */
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("成功建立连接。。。。");
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("RamoteAddress : " + ctx.channel().remoteAddress() + " active !");
-         ctx.writeAndFlush( "Welcome to " + InetAddress.getLocalHost().getHostName() + " service!\n");
-         super.channelActive(ctx);
+        ctx.writeAndFlush( "Welcome to " + InetAddress.getLocalHost().getHostName() + " service!\n");
+        super.channelActive(ctx);
     }
+
+
 }
