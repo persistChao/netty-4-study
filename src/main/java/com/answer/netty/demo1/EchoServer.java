@@ -29,10 +29,11 @@ public class EchoServer {
 
     public void start() throws Exception {
         final EchoServerHandler serverHandler = new EchoServerHandler();
-        EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup workGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
-            b.group(group)
+            b.group(bossGroup , workGroup)
             .channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port))
             .childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
@@ -44,7 +45,8 @@ public class EchoServer {
             System.out.println(EchoServer.class.getName() + "started and listening for connections on " + future.channel().localAddress());
             future.channel().closeFuture().sync();
         }finally {
-            group.shutdownGracefully().sync();
+            workGroup.shutdownGracefully();
+            bossGroup.shutdownGracefully();
         }
     }
 }
