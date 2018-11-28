@@ -22,7 +22,7 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter{
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        buf.release(); // (1)
+        buf.release();
         buf = null;
     }
 
@@ -34,15 +34,23 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter{
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf byteBuf = (ByteBuf)msg;
-        buf.writeBytes(byteBuf);
-        byteBuf.release();
-        try {
-            long currentMillions = (byteBuf.readUnsignedInt() - 2208988800L)*1000L;
-            System.out.println(new Date(currentMillions));
+//        ByteBuf byteBuf = (ByteBuf)msg;
+//        try {
+//            long currentMillions = (byteBuf.readUnsignedInt() - 2208988800L)*1000L;
+//            System.out.println(new Date(currentMillions));
+//            ctx.close();
+//        }finally {
+//            byteBuf.release();
+//        }
+
+        ByteBuf m = (ByteBuf)msg;
+        buf.writeBytes(m);
+        m.release();
+        if (buf.readableBytes() == 4) {
+            long currentTimeMillis = (buf.readInt() - 2208988800L) * 1000L;
+            System.out.println(new Date(currentTimeMillis));
             ctx.close();
-        }finally {
-            byteBuf.release();
+
         }
     }
 

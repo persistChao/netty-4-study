@@ -28,17 +28,15 @@ public class TimeClient {
                     .option(ChannelOption.SO_KEEPALIVE , true)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(new TimeDecoder());
                             ch.pipeline().addLast(new TimeClientHandler());
                         }
                     });
 
             //启动客户端
-            Channel f = b.connect(host,port).sync().channel();
-            f.writeAndFlush("hello netty!");
-            f.writeAndFlush("hello netty!");
-            f.writeAndFlush("hello netty!");
+            ChannelFuture f = b.connect(host,port).sync();
             //等待连接关闭
-//            f.channel().closeFuture().sync();
+            f.channel().closeFuture().sync();
         }finally {
             group.shutdownGracefully();
         }

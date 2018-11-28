@@ -13,12 +13,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class TimeServerHandler extends ChannelInboundHandlerAdapter{
 
-
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-    }
-
     /**
      * 1
      * channelActive() 方法将会在连接被建立并且准备进行通信时被调用。
@@ -37,7 +31,6 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter{
         time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
         final ChannelFuture f = ctx.writeAndFlush(time);
         f.addListener(new ChannelFutureListener() {
-
             public void operationComplete(ChannelFuture future) throws Exception {
                 assert  f == future;
                 ctx.close();
