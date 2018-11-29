@@ -1,4 +1,4 @@
-package com.answer.netty.time;
+package com.answer.netty.transfer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,6 +17,6 @@ public class TimeDecoder extends ByteToMessageDecoder {
         if (in.readableBytes() < 4) {
             return;
         }
-        out.add(in.readBytes(4));
+        out.add(new UnixTime(in.readInt()));
     }
 }

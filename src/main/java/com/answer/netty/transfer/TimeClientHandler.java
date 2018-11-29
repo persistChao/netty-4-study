@@ -1,4 +1,4 @@
-package com.answer.netty.time;
+package com.answer.netty.transfer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -42,16 +42,18 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter{
 //        }finally {
 //            byteBuf.release();
 //        }
-
-        ByteBuf m = (ByteBuf)msg;
-        buf.writeBytes(m);
-        m.release();
-        if (buf.readableBytes() == 4) {
-            long currentTimeMillis = (buf.readInt() - 2208988800L) * 1000L;
-            System.out.println(new Date(currentTimeMillis));
-            ctx.close();
-
-        }
+        /////////////////////////////////////
+//        ByteBuf m = (ByteBuf)msg;
+//        buf.writeBytes(m);
+//        m.release();
+//        if (buf.readableBytes() == 4) {
+//            long currentTimeMillis = (buf.readInt() - 2208988800L) * 1000L;
+//            System.out.println(new Date(currentTimeMillis));
+//            ctx.close();
+//        }
+        UnixTime time = (UnixTime)msg;
+        System.out.println(time);
+        ctx.close();
     }
 
     @Override

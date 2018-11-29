@@ -1,4 +1,4 @@
-package com.answer.netty.time;
+package com.answer.netty.transfer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -26,16 +26,19 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter{
      */
     @Override
     public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-        System.out.println("accept message...");
-        final ByteBuf time = ctx.alloc().buffer(4);
-        time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
-        final ChannelFuture f = ctx.writeAndFlush(time);
-        f.addListener(new ChannelFutureListener() {
-            public void operationComplete(ChannelFuture future) throws Exception {
-                assert  f == future;
-                ctx.close();
-            }
-        });
+//        System.out.println("accept message...");
+//        final ByteBuf time = ctx.alloc().buffer(4);
+//        time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
+//        final ChannelFuture f = ctx.writeAndFlush(time);
+//        f.addListener(new ChannelFutureListener() {
+//            public void operationComplete(ChannelFuture future) throws Exception {
+//                assert  f == future;
+//                ctx.close();
+//            }
+//        });
+
+        ChannelFuture future = ctx.writeAndFlush(new UnixTime());
+        future.addListener(ChannelFutureListener.CLOSE);
     }
 
     @Override
